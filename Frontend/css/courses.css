@@ -1,0 +1,42 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+#coursesList {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.course {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+}
+
+.course h3 {
+    margin: 0;
+    color: #333;
+}
+
+.course p {
+    margin: 5px 0;
+    color: #666;
+}
+
+.course img {
+    max-width: 100px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
