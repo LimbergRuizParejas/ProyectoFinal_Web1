@@ -4,18 +4,18 @@ const sequelize = require('../config/database');
 const Course = sequelize.define('Course', {
   title: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   description: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   image: {
     type: DataTypes.STRING,
-    allowNull: false
-  }
+    allowNull: false,
+  },
 }, {
-  timestamps: true
+  timestamps: true,
 });
 
 module.exports = Course;

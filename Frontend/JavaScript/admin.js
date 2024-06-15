@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
   const addCourseForm = document.getElementById('addCourseForm');
-  const createAdminForm = document.getElementById('createAdminForm');
   const coursesList = document.getElementById('coursesList');
   const logoutButton = document.getElementById('logoutButton');
   const token = localStorage.getItem('token');
@@ -33,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
         <h3>${course.title}</h3>
         <p>${course.description}</p>
         <img src="${course.image}" alt="${course.title}">
-        <button onclick="editCourse(${course.id})">Editar</button>
         <button onclick="deleteCourse(${course.id})">Eliminar</button>
       `;
       coursesList.appendChild(courseDiv);
@@ -42,18 +40,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   addCourseForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const title = document.getElementById('title').value;
-    const description = document.getElementById('description').value;
-    const image = document.getElementById('image').value;
+
+    const formData = new FormData();
+    formData.append('title', document.getElementById('title').value);
+    formData.append('description', document.getElementById('description').value);
+    formData.append('image', document.getElementById('image').files[0]);
 
     try {
       const response = await fetch('http://localhost:5001/api/admin/courses', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           'x-auth-token': token
         },
-        body: JSON.stringify({ title, description, image })
+        body: formData
       });
 
       if (!response.ok) {
@@ -65,34 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
       addCourseForm.reset();
     } catch (error) {
       console.error('Error al agregar el curso:', error);
-    }
-  });
-
-  createAdminForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const name = document.getElementById('adminName').value;
-    const email = document.getElementById('adminEmail').value;
-    const password = document.getElementById('adminPassword').value;
-
-    try {
-      const response = await fetch('http://localhost:5001/api/users/create-admin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-auth-token': token
-        },
-        body: JSON.stringify({ name, email, password })
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      alert(data.msg);
-      createAdminForm.reset();
-    } catch (error) {
-      console.error('Error al crear el administrador:', error);
     }
   });
 

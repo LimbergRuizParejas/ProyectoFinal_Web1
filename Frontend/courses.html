@@ -4,11 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Cursos</title>
-    <link rel="stylesheet" href="css/courses.css">
+    <link rel="stylesheet" href="css/css.css">
 </head>
 <body>
-<h1>Lista de Cursos</h1>
-<div id="coursesList"></div>
-<script src="JavaScript/courses.js"></script>
+<header>
+    <h1>Plataforma de Cursos</h1>
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="courses.html">Cursos</a></li>
+            <li><a href="login.html">Registrarse/Iniciar Sesión</a></li>
+            <li><a href="#" id="logoutButton">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <section class="course-list" id="coursesList">
+        <!-- Aquí se renderizarán los cursos -->
+    </section>
+</main>
+<footer>
+    <p>&copy; 2024 Plataforma de Cursos</p>
+</footer>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('No estás autenticado. Por favor, inicia sesión.');
+            window.location.href = 'login.html'; // Redirigir a la página de autenticación si no hay token
+        }
+
+        const logoutButton = document.getElementById('logoutButton');
+        logoutButton.addEventListener('click', () => {
+            localStorage.removeItem('token');
+            alert('Sesión cerrada');
+            window.location.href = 'login.html'; // Redirigir a la página de autenticación después de cerrar sesión
+        });
+    });
+</script>
+<script src="JavaScript/courses.js"></script> <!-- Asegúrate de vincular el archivo JavaScript correcto -->
 </body>
 </html>

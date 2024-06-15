@@ -1,47 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const { check } = require('express-validator');
+const userController = require('../controllers/userController');
 
-// Inicio de sesión
-router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+router.post('/register', [
+  check('name', 'El nombre es obligatorio').not().isEmpty(),
+  check('email', 'Por favor incluye un correo válido').isEmail(),
+  check('password', 'La contraseña debe tener 6 o más caracteres').isLength({ min: 6 }),
+], userController.register);
 
-  if (!email || !password) {
-    return res.status(400).json({ msg: 'Por favor, introduce todos los campos' });
-  }
-
-  try {
-    let user = await User.findOne({ where: { email } });
-    if (!user) {
-      return res.status(400).json({ msg: 'Credenciales inválidas' });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ msg: 'Credenciales inválidas' });
-    }
-
-    const payload = {
-      user: {
-        id: user.id
-      }
-    };
-
-    jwt.sign(
-      payload,
-      'secrettoken',
-      { expiresIn: '1h' },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token });
-      }
-    );
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Error del servidor');
-  }
-});
+router.post('/login', [
+  check('email', 'Por favor incluye un correo válido').isEmail(),
+  check('password', 'La contraseña es requerida').exists(),
+], userController.login);
 
 module.exports = router;
