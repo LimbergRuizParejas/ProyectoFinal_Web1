@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Autenticación</title>
     <link rel="stylesheet" href="css/login.css">
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
 </head>
 <body>
 <h1>Autenticación</h1>
@@ -26,7 +27,14 @@
             <input type="password" id="loginPassword" placeholder="Contraseña" required><br>
             <button type="submit">Iniciar Sesión</button>
         </form>
-        <button id="adminLoginButton">Iniciar Sesión como Administrador</button>
+    </div>
+    <div class="auth-forms">
+        <h2>Inicio de Sesión como Administrador</h2>
+        <form id="adminLoginForm">
+            <input type="email" id="adminEmail" placeholder="Correo Electrónico" required><br>
+            <input type="password" id="adminPassword" placeholder="Contraseña" required><br>
+            <button type="submit">Iniciar Sesión como Administrador</button>
+        </form>
     </div>
 </div>
 

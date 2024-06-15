@@ -7,7 +7,7 @@ const userRoutes = require('./routes/user');
 const adminRoutes = require('./routes/admin');
 
 const app = express();
-const port = process.env.PORT || 5001; // Asegúrate de que este puerto es 5001
+const port = process.env.PORT || 5001;
 
 // Middleware
 app.use(bodyParser.json());

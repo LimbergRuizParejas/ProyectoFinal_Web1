@@ -19,41 +19,13 @@
     </nav>
 </header>
 <main>
-    <section class="course-list">
-        <div class="course-item">
-            <img src="Frontend/images/course1.jpg" alt="Curso 1">
-            <h2>Curso Excel + Macros + Power Pivot</h2>
-            <p>Descripción del curso</p>
-            <a href="course_detail.html">Ver más</a>
-        </div>
-        <div class="course-item">
-            <img src="Frontend/images/course2.jpg" alt="Curso 2">
-            <h2>Excel Módulo 1 - Análisis y Dashboards</h2>
-            <p>Descripción del curso</p>
-            <a href="course_detail.html">Ver más</a>
-        </div>
-        <!-- Agrega más cursos aquí -->
+    <section class="course-list" id="coursesList">
+        <!-- Cursos se mostrarán aquí -->
     </section>
 </main>
 <footer>
     <p>&copy; 2024 Plataforma de Cursos</p>
 </footer>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            alert('No estás autenticado. Por favor, inicia sesión.');
-            window.location.href = 'login.html'; // Redirigir a la página de autenticación si no hay token
-        }
-
-        const logoutButton = document.getElementById('logoutButton');
-        logoutButton.addEventListener('click', () => {
-            localStorage.removeItem('token');
-            alert('Sesión cerrada');
-            window.location.href = 'login.html'; // Redirigir a la página de autenticación después de cerrar sesión
-        });
-    });
-</script>
-<script src="JavaScript/scripts.js"></script>
+<script src="JavaScript/index.js"></script>
 </body>
 </html>
