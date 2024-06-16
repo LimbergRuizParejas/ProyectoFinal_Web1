@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <h3>${course.title}</h3>
         <p>${course.description}</p>
         <img src="${course.image}" alt="${course.title}">
+        <button onclick="editCourse(${course.id})">Editar</button>
         <button onclick="deleteCourse(${course.id})">Eliminar</button>
       `;
       coursesList.appendChild(courseDiv);
@@ -84,6 +85,31 @@ document.addEventListener('DOMContentLoaded', () => {
         getCourses();
       } catch (error) {
         console.error('Error al eliminar el curso:', error);
+      }
+    }
+  };
+
+  window.editCourse = async (id) => {
+    const newTitle = prompt('Ingrese el nuevo título del curso:');
+    const newDescription = prompt('Ingrese la nueva descripción del curso:');
+    if (newTitle && newDescription) {
+      try {
+        const response = await fetch(`http://localhost:5001/api/admin/courses/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-auth-token': token
+          },
+          body: JSON.stringify({ title: newTitle, description: newDescription })
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+
+        getCourses();
+      } catch (error) {
+        console.error('Error al actualizar el curso:', error);
       }
     }
   };

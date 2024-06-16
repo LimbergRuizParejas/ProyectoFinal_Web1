@@ -4,7 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const { check, validationResult } = require('express-validator');
 const Course = require('../models/Course');
-const auth = require('../middleware/auth');
+const { verifyToken, isAdmin } = require('../middleware/auth');
 const fs = require('fs');
 
 // Crear el directorio de uploads si no existe
@@ -26,7 +26,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Obtener todos los cursos
-router.get('/courses', auth, async (req, res) => {
+router.get('/courses', verifyToken, isAdmin, async (req, res) => {
   try {
     const courses = await Course.findAll();
     res.json(courses);
@@ -38,7 +38,8 @@ router.get('/courses', auth, async (req, res) => {
 
 // Crear un nuevo curso
 router.post('/courses', upload.single('image'), [
-  auth,
+  verifyToken,
+  isAdmin,
   [
     check('title', 'El título es obligatorio').not().isEmpty(),
     check('description', 'La descripción es obligatoria').not().isEmpty()
@@ -60,6 +61,57 @@ router.post('/courses', upload.single('image'), [
     });
 
     res.json(newCourse);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Error del servidor');
+  }
+});
+
+// Actualizar un curso
+router.put('/courses/:id', verifyToken, isAdmin, upload.single('image'), [
+  check('title', 'El título es obligatorio').optional().not().isEmpty(),
+  check('description', 'La descripción es obligatoria').optional().not().isEmpty()
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { title, description } = req.body;
+  const image = req.file ? req.file.path : null;
+
+  try {
+    let course = await Course.findByPk(req.params.id);
+
+    if (!course) {
+      return res.status(404).json({ msg: 'Curso no encontrado' });
+    }
+
+    course.title = title || course.title;
+    course.description = description || course.description;
+    if (image) {
+      course.image = image;
+    }
+
+    await course.save();
+    res.json(course);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Error del servidor');
+  }
+});
+
+// Eliminar un curso
+router.delete('/courses/:id', verifyToken, isAdmin, async (req, res) => {
+  try {
+    let course = await Course.findByPk(req.params.id);
+
+    if (!course) {
+      return res.status(404).json({ msg: 'Curso no encontrado' });
+    }
+
+    await course.destroy();
+    res.json({ msg: 'Curso eliminado' });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Error del servidor');
